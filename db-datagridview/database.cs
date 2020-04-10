@@ -22,7 +22,6 @@ namespace db_datagridview
             AutoPrepareMinUsages = 2,
             MaxAutoPrepare = 10
         }.ConnectionString;
-
         public static void InitializeDGVClients(DataGridView dgv_clients)
         {
             dgv_clients.Rows.Clear();
@@ -72,7 +71,6 @@ namespace db_datagridview
                 }
             }
         }
-
         private static DataTable GetCoachTypes()
         {
             using (var sConn = new NpgsqlConnection(_sConnStr))
@@ -88,12 +86,10 @@ namespace db_datagridview
                 }
             }
         }
-
         public static void InitializeDGVCoaches(DataGridView dgv_coaches)
         {
             dgv_coaches.Rows.Clear();
             dgv_coaches.Columns.Clear();
-            GetCoachTypes();
             dgv_coaches.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "coach_id",
@@ -150,6 +146,50 @@ namespace db_datagridview
                                                         reader["coach_coach_type_id"]);
                     dgv_coaches.Rows[row_idx].Tag = coach_data;
                 }
+            }
+        }
+        public static int InsertClient(string client_name, DateTime client_birthday,
+                                       long client_passport, string client_phone,
+                                       string client_email)
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = $@"INSERT INTO client (client_name,
+                                                        client_birthday,
+                                                        client_passport,
+                                                        client_phone,
+                                                        client_email)
+                                    VALUES (@client_name,
+                                            @client_birthday,
+                                            @client_passport,
+                                            @client_phone,
+                                            @client_email)
+                                    RETURNING client_id"
+                };
+                sCommand.Parameters.AddWithValue("@client_name", client_name);
+                sCommand.Parameters.AddWithValue("@client_birthday", client_birthday);
+                sCommand.Parameters.AddWithValue("@client_passport", client_passport);
+                sCommand.Parameters.AddWithValue("@client_phone", client_phone);
+                sCommand.Parameters.AddWithValue("@client_email", client_email);
+                return (int)sCommand.ExecuteScalar();
+            }
+        }
+        public static void DeleteClient(int[] client_ids)
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = @"DELETE FROM client WHERE client_id = ANY(@client_id)"
+                };
+                sCommand.Parameters.AddWithValue("@client_id", client_ids);
+                sCommand.ExecuteNonQuery();
             }
         }
     }
