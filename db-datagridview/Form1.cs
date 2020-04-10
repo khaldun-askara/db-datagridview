@@ -16,6 +16,7 @@ namespace db_datagridview
         {
             InitializeComponent();
             database_funcs.InitializeDGVClients(dgv_clients);
+            database_funcs.InitializeDGVCoaches(dgv_coaches);
         }
     }
 }

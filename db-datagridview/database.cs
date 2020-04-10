@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
 using System.Windows.Forms;
+using System.Data;
 
 namespace db_datagridview
 {
+
     class database_funcs
     {
         private static readonly string _sConnStr = new NpgsqlConnectionStringBuilder
@@ -67,6 +69,86 @@ namespace db_datagridview
                                                         reader["client_phone"],
                                                         reader["client_email"]);
                     dgv_clients.Rows[row_idx].Tag = client_data;
+                }
+            }
+        }
+
+        private static DataTable GetCoachTypes()
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                using (var sCommand = new NpgsqlCommand())
+                {
+                    sCommand.Connection = sConn;
+                    sCommand.CommandText = "SELECT * FROM coach_type";
+                    var table = new DataTable();
+                    table.Load(sCommand.ExecuteReader());
+                    return table;
+                }
+            }
+        }
+
+        public static void InitializeDGVCoaches(DataGridView dgv_coaches)
+        {
+            dgv_coaches.Rows.Clear();
+            dgv_coaches.Columns.Clear();
+            GetCoachTypes();
+            dgv_coaches.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "coach_id",
+                Visible = false
+            });
+            dgv_coaches.Columns.Add("coach_name", "ФИО клиента");
+            dgv_coaches.Columns.Add(new CalendarColumn
+            {
+                Name = "coach_birthday",
+                HeaderText = "Дата рождения"
+            });
+            dgv_coaches.Columns.Add("coach_passport", "Номер паспорта");
+            dgv_coaches.Columns.Add("coach_tin", "ИНН");
+            dgv_coaches.Columns.Add("coach_phone", "Номер телефона");
+            dgv_coaches.Columns.Add("coach_salary", "Оклад");
+            dgv_coaches.Columns.Add(new DataGridViewComboBoxColumn
+            {
+                HeaderText = "Тип тренера",
+                DisplayMember = "coach_type_name",
+                ValueMember = "coach_type_id",
+                DataSource = GetCoachTypes()
+            });
+
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = "SELECT * FROM coach"
+                };
+                var reader = sCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    var coach_data = new Dictionary<string, object>();
+                    foreach (var columnsName in new[] { "coach_name",
+                                                        "coach_birthday",
+                                                        "coach_passport",
+                                                        "coach_tin",
+                                                        "coach_phone",
+                                                        "coach_salary",
+                                                        "coach_coach_type_id"})
+                    {
+                        coach_data[columnsName] = reader[columnsName];
+                    }
+
+                    var row_idx = dgv_coaches.Rows.Add(reader["coach_id"],
+                                                        reader["coach_name"],
+                                                        reader["coach_birthday"],
+                                                        reader["coach_passport"],
+                                                        reader["coach_tin"],
+                                                        reader["coach_phone"],
+                                                        reader["coach_salary"],
+                                                        reader["coach_coach_type_id"]);
+                    dgv_coaches.Rows[row_idx].Tag = coach_data;
                 }
             }
         }
