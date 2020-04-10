@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace db_datagridview
 {
-    public partial class Form1 : Form
+    public partial class client_coach : Form
     {
-        public Form1()
+        public client_coach()
         {
             InitializeComponent();
+            database_funcs.InitializeDGVClients(dgv_clients);
         }
     }
 }
