@@ -178,6 +178,33 @@ namespace db_datagridview
                 return (int)sCommand.ExecuteScalar();
             }
         }
+        public static void UpdateClient(int client_id, string client_name, 
+                                        DateTime client_birthday, long client_passport,
+                                        string client_phone, string client_email)
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = $@"UPDATE client
+                                    SET client_name = @client_name,
+                                        client_birthday = @client_birthday,
+                                        client_passport = @client_passport, 
+                                        client_phone = @client_phone,
+                                        client_email = @client_email
+                                    WHERE client_id = @client_id"
+                };
+                sCommand.Parameters.AddWithValue("@client_id", client_id);
+                sCommand.Parameters.AddWithValue("@client_name", client_name);
+                sCommand.Parameters.AddWithValue("@client_birthday", client_birthday);
+                sCommand.Parameters.AddWithValue("@client_passport", client_passport);
+                sCommand.Parameters.AddWithValue("@client_phone", client_phone);
+                sCommand.Parameters.AddWithValue("@client_email", client_email);
+                sCommand.ExecuteNonQuery();
+            }
+        }
         public static void DeleteClient(int[] client_ids)
         {
             using (var sConn = new NpgsqlConnection(_sConnStr))
@@ -189,6 +216,89 @@ namespace db_datagridview
                     CommandText = @"DELETE FROM client WHERE client_id = ANY(@client_id)"
                 };
                 sCommand.Parameters.AddWithValue("@client_id", client_ids);
+                sCommand.ExecuteNonQuery();
+            }
+        }
+        public static int InsertCoach(string coach_name, DateTime coach_birthday, 
+                                      long coach_passport, long coach_tin, 
+                                      string coach_phone, int coach_salary, 
+                                      int coach_coach_type_id)
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = $@"INSERT INTO coach (coach_name,
+                                                        coach_birthday,
+                                                        coach_passport,
+                                                        coach_tin,
+                                                        coach_phone,
+                                                        coach_salary,
+                                                        coach_coach_type_id)
+                                    VALUES (@coach_name,
+                                            @coach_birthday,
+                                            @coach_passport,
+                                            @coach_tin,
+                                            @coach_phone,
+                                            @coach_salary,
+                                            @coach_coach_type_id)
+                                    RETURNING coach_id"
+                };
+                sCommand.Parameters.AddWithValue("@coach_name", coach_name);
+                sCommand.Parameters.AddWithValue("@coach_birthday", coach_birthday);
+                sCommand.Parameters.AddWithValue("@coach_passport", coach_passport);
+                sCommand.Parameters.AddWithValue("@coach_tin", coach_tin);
+                sCommand.Parameters.AddWithValue("@coach_phone", coach_phone);
+                sCommand.Parameters.AddWithValue("@coach_salary", coach_salary);
+                sCommand.Parameters.AddWithValue("@coach_coach_type_id", coach_coach_type_id);
+                return (int)sCommand.ExecuteScalar();
+            }
+        }
+        public static int UpdateCoach(int coach_id, string coach_name,
+                                      DateTime coach_birthday, long coach_passport, 
+                                      long coach_tin, string coach_phone, 
+                                      int coach_salary, int coach_coach_type_id)
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = $@"UPDATE coach
+                                    SET coach_name = @coach_name,
+                                        coach_birthday = @coach_birthday,
+                                        coach_passport = @coach_passport, 
+                                        coach_tin = @coach_tin,
+                                        coach_phone = @coach_phone,
+                                        coach_salary = @coach_salary,
+                                        coach_coach_type_id = @coach_coach_type_id,
+                                    WHERE coach_id = @coach_id"
+                };
+                sCommand.Parameters.AddWithValue("@coach_id", coach_id);
+                sCommand.Parameters.AddWithValue("@coach_name", coach_name);
+                sCommand.Parameters.AddWithValue("@coach_birthday", coach_birthday);
+                sCommand.Parameters.AddWithValue("@coach_passport", coach_passport);
+                sCommand.Parameters.AddWithValue("@coach_tin", coach_tin);
+                sCommand.Parameters.AddWithValue("@coach_phone", coach_phone);
+                sCommand.Parameters.AddWithValue("@coach_salary", coach_salary);
+                sCommand.Parameters.AddWithValue("@coach_coach_type_id", coach_coach_type_id);
+                return (int)sCommand.ExecuteScalar();
+            }
+        }
+        public static void DeleteCoach(int[] coach_ids)
+        {
+            using (var sConn = new NpgsqlConnection(_sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = @"DELETE FROM coach WHERE coach_id = ANY(@coach_id)"
+                };
+                sCommand.Parameters.AddWithValue("@coach_id", coach_ids);
                 sCommand.ExecuteNonQuery();
             }
         }
