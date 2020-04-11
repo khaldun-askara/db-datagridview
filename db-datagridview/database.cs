@@ -95,7 +95,7 @@ namespace db_datagridview
                 Name = "coach_id",
                 Visible = false
             });
-            dgv_coaches.Columns.Add("coach_name", "ФИО клиента");
+            dgv_coaches.Columns.Add("coach_name", "ФИО тренера");
             dgv_coaches.Columns.Add(new CalendarColumn
             {
                 Name = "coach_birthday",
