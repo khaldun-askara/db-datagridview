@@ -178,7 +178,7 @@ namespace db_datagridview
                 return (int)sCommand.ExecuteScalar();
             }
         }
-        public static void UpdateClient(int client_id, string client_name, 
+        public static void UpdateClient(int client_id, string client_name,
                                         DateTime client_birthday, long client_passport,
                                         string client_phone, string client_email)
         {
