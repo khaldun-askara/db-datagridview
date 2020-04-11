@@ -62,6 +62,7 @@
             this.dgv_coaches.RowTemplate.Height = 24;
             this.dgv_coaches.Size = new System.Drawing.Size(816, 309);
             this.dgv_coaches.TabIndex = 1;
+            this.dgv_coaches.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.dgv_coaches_PreviewKeyDown);
             // 
             // tableLayoutPanel1
             // 

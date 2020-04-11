@@ -107,6 +107,7 @@ namespace db_datagridview
             dgv_coaches.Columns.Add("coach_salary", "Оклад");
             dgv_coaches.Columns.Add(new DataGridViewComboBoxColumn
             {
+                Name = "coach_type_id",
                 HeaderText = "Тип тренера",
                 DisplayMember = "coach_type_name",
                 ValueMember = "coach_type_id",

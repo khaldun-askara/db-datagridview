@@ -101,5 +101,28 @@ namespace db_datagridview
                 }
             }
         }
+
+        private void dgv_coaches_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape && dgv_coaches.IsCurrentRowDirty)
+            {
+                dgv_coaches.CancelEdit();
+                if (dgv_coaches.CurrentRow.Cells["coach_id"].Value != null)
+                {
+                    dgv_coaches.CurrentRow.ErrorText = "";
+                    foreach (var kvp in (Dictionary<string, object>)dgv_coaches.CurrentRow.Tag)
+                    {
+                        if (kvp.Key == "coach_coach_type_id") continue;
+                        dgv_coaches.CurrentRow.Cells[kvp.Key].Value = kvp.Value;
+                        dgv_coaches.CurrentRow.Cells[kvp.Key].ErrorText = "";
+                    }
+                    ((DataGridViewComboBoxCell)dgv_coaches.CurrentRow.Cells["coach_type_id"]).Value = ((Dictionary<string, object>)dgv_coaches.CurrentRow.Tag)["coach_coach_type_id"];
+                }
+                else
+                {
+                    dgv_coaches.Rows.Remove(dgv_coaches.CurrentRow);
+                }
+            }
+        }
     }
 }
