@@ -205,7 +205,7 @@ namespace db_datagridview
                 sCommand.ExecuteNonQuery();
             }
         }
-        public static void DeleteClient(int[] client_ids)
+        public static void DeleteClient(int client_id)
         {
             using (var sConn = new NpgsqlConnection(_sConnStr))
             {
@@ -213,9 +213,9 @@ namespace db_datagridview
                 var sCommand = new NpgsqlCommand
                 {
                     Connection = sConn,
-                    CommandText = @"DELETE FROM client WHERE client_id = ANY(@client_id)"
+                    CommandText = @"DELETE FROM client WHERE client_id = @client_id"
                 };
-                sCommand.Parameters.AddWithValue("@client_id", client_ids);
+                sCommand.Parameters.AddWithValue("@client_id", client_id);
                 sCommand.ExecuteNonQuery();
             }
         }

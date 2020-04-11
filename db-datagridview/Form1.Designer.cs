@@ -48,6 +48,7 @@
             this.dgv_clients.Size = new System.Drawing.Size(816, 308);
             this.dgv_clients.TabIndex = 0;
             this.dgv_clients.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgv_clients_RowValidating);
+            this.dgv_clients.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgv_clients_UserDeletingRow);
             // 
             // dgv_coaches
             // 

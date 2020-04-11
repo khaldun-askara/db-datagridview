@@ -76,5 +76,12 @@ namespace db_datagridview
                 }
             }
         }
+
+        private void dgv_clients_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            var client_id = (int?)e.Row.Cells["client_id"].Value;
+            if (client_id.HasValue)
+                database_funcs.DeleteClient(client_id.Value);
+        }
     }
 }
