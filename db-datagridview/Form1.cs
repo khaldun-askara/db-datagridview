@@ -124,5 +124,12 @@ namespace db_datagridview
                 }
             }
         }
+
+        private void dgv_coaches_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            var coach_id = (int?)e.Row.Cells["coach_id"].Value;
+            if (coach_id.HasValue)
+                database_funcs.DeleteClient(coach_id.Value);
+        }
     }
 }
