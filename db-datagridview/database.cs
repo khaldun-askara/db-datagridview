@@ -288,7 +288,7 @@ namespace db_datagridview
                 return (int)sCommand.ExecuteScalar();
             }
         }
-        public static void DeleteCoach(int[] coach_ids)
+        public static void DeleteCoach(int coach_id)
         {
             using (var sConn = new NpgsqlConnection(_sConnStr))
             {
@@ -296,9 +296,9 @@ namespace db_datagridview
                 var sCommand = new NpgsqlCommand
                 {
                     Connection = sConn,
-                    CommandText = @"DELETE FROM coach WHERE coach_id = ANY(@coach_id)"
+                    CommandText = @"DELETE FROM coach WHERE coach_id = @coach_id"
                 };
-                sCommand.Parameters.AddWithValue("@coach_id", coach_ids);
+                sCommand.Parameters.AddWithValue("@coach_id", coach_id);
                 sCommand.ExecuteNonQuery();
             }
         }

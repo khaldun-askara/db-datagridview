@@ -18,7 +18,6 @@ namespace db_datagridview
             database_funcs.InitializeDGVClients(dgv_clients);
             database_funcs.InitializeDGVCoaches(dgv_coaches);
         }
-
         private void dgv_clients_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
             long temp = 0;
@@ -76,12 +75,31 @@ namespace db_datagridview
                 }
             }
         }
-
         private void dgv_clients_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             var client_id = (int?)e.Row.Cells["client_id"].Value;
             if (client_id.HasValue)
                 database_funcs.DeleteClient(client_id.Value);
+        }
+        private void dgv_clients_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape && dgv_clients.IsCurrentRowDirty)
+            {
+                dgv_clients.CancelEdit();
+                if (dgv_clients.CurrentRow.Cells["id"].Value != null)
+                {
+                    dgv_clients.CurrentRow.ErrorText = "";
+                    foreach (var kvp in (Dictionary<string, object>)dgv_clients.CurrentRow.Tag)
+                    {
+                        dgv_clients.CurrentRow.Cells[kvp.Key].Value = kvp.Value;
+                        dgv_clients.CurrentRow.Cells[kvp.Key].ErrorText = "";
+                    }
+                }
+                else
+                {
+                    dgv_clients.Rows.Remove(dgv_clients.CurrentRow);
+                }
+            }
         }
     }
 }
