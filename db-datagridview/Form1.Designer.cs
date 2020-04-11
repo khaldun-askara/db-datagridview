@@ -62,6 +62,7 @@
             this.dgv_coaches.RowTemplate.Height = 24;
             this.dgv_coaches.Size = new System.Drawing.Size(816, 309);
             this.dgv_coaches.TabIndex = 1;
+            this.dgv_coaches.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgv_coaches_RowValidating);
             this.dgv_coaches.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgv_coaches_UserDeletingRow);
             this.dgv_coaches.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.dgv_coaches_PreviewKeyDown);
             // 
@@ -87,7 +88,7 @@
             this.ClientSize = new System.Drawing.Size(822, 629);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "client_coach";
-            this.Text = "Form1";
+            this.Text = "Клиенты и тренера";
             ((System.ComponentModel.ISupportInitialize)(this.dgv_clients)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_coaches)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);

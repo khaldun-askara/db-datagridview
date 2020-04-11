@@ -107,7 +107,7 @@ namespace db_datagridview
             dgv_coaches.Columns.Add("coach_salary", "Оклад");
             dgv_coaches.Columns.Add(new DataGridViewComboBoxColumn
             {
-                Name = "coach_type_id",
+                Name = "coach_coach_type_id",
                 HeaderText = "Тип тренера",
                 DisplayMember = "coach_type_name",
                 ValueMember = "coach_type_id",
@@ -257,7 +257,7 @@ namespace db_datagridview
                 return (int)sCommand.ExecuteScalar();
             }
         }
-        public static int UpdateCoach(int coach_id, string coach_name,
+        public static void UpdateCoach(int coach_id, string coach_name,
                                       DateTime coach_birthday, long coach_passport, 
                                       long coach_tin, string coach_phone, 
                                       int coach_salary, int coach_coach_type_id)
@@ -275,7 +275,7 @@ namespace db_datagridview
                                         coach_tin = @coach_tin,
                                         coach_phone = @coach_phone,
                                         coach_salary = @coach_salary,
-                                        coach_coach_type_id = @coach_coach_type_id,
+                                        coach_coach_type_id = @coach_coach_type_id
                                     WHERE coach_id = @coach_id"
                 };
                 sCommand.Parameters.AddWithValue("@coach_id", coach_id);
@@ -286,7 +286,7 @@ namespace db_datagridview
                 sCommand.Parameters.AddWithValue("@coach_phone", coach_phone);
                 sCommand.Parameters.AddWithValue("@coach_salary", coach_salary);
                 sCommand.Parameters.AddWithValue("@coach_coach_type_id", coach_coach_type_id);
-                return (int)sCommand.ExecuteScalar();
+                sCommand.ExecuteNonQuery();
             }
         }
         public static void DeleteCoach(int coach_id)
